@@ -4,7 +4,7 @@
 > **Live Demo:** [Access the Interactive Credit Risk Dashboard](https://credit-risk-project-dbpfuopxmaezrtgbveundv.streamlit.app/)
 
 ### 📝 Project Overview
-This project demonstrates a professional-grade Credit Risk / Credit Card Approval system—from synthetic data generation to cloud deployment. In the banking sector, the cost of a **False Negative** (approving a defaulter) is significantly higher than a **False Positive**. This system is engineered to prioritize **Recall** and **Business Logic** over raw accuracy.
+This project demonstrates a production-ready Credit Risk / Credit Card Approval system—from synthetic data generation to cloud deployment. In banking, the financial cost of a **False Negative** (approving a defaulter) is significantly higher than a **False Positive**. This system is specifically engineered to optimize **Recall** and **Business Decision Logic**.
 
 ---
 
@@ -20,9 +20,9 @@ This project demonstrates a professional-grade Credit Risk / Credit Card Approva
 ---
 
 ### 🎯 Problem Statement
-The primary challenge in credit modeling is balancing **Profitability** (approving safe customers) vs. **Risk** (avoiding defaulters). Because high-risk customers are a minority, this project implements:
-1. **Recall-Optimized Modeling:** Identifying as many potential defaulters as possible.
-2. **Cost-Sensitive Learning:** Accounting for the $5\times$ higher cost of credit defaults compared to missed opportunities.
+The primary challenge in credit modeling is balancing **Profitability** (approving safe customers) vs. **Risk** (avoiding defaulters). Because high-risk customers are a minority in real-world datasets, this project implements:
+* **Recall-Optimized Modeling:** Prioritizing the detection of potential defaulters.
+* **Cost-Sensitive Learning:** Accounting for the $5\times$ higher cost of credit defaults compared to missed opportunities.
 
 ### 🛠️ Tech Stack
 * **Language:** Python 3.9+
@@ -32,28 +32,28 @@ The primary challenge in credit modeling is balancing **Profitability** (approvi
 * **Analysis:** Pandas, NumPy, Matplotlib, Seaborn
 
 ### 📊 Data Dictionary
-We simulate realistic banking-style data including:
-* **Age/Income/Employment:** Basic demographics and stability indicators.
-* **Credit Score:** Bureau-provided score (300-850).
-* **Utilization Ratio:** Percentage of credit currently used.
+The model utilizes realistic banking-style features:
+* **Age/Income/Employment:** Basic demographics and financial stability.
+* **Credit Score:** Bureau-provided scores (300-850).
+* **Utilization Ratio:** Percentage of total credit currently utilized.
 * **Debt-to-Income (DTI):** Calculated as $\frac{\text{Requested Loan}}{\text{Annual Income}}$.
-* **Late Payments:** Number of times a customer missed a due date.
+* **Late Payments:** Historical count of missed due dates.
 
 ---
 
 ### ⚙️ Advanced Machine Learning Workflow
 
 #### 1. Handling Class Imbalance (SMOTE)
-Standard models often ignore minority "High Risk" classes. We utilize **SMOTE** (Synthetic Minority Over-sampling Technique) to generate synthetic samples, ensuring the model learns the specific signatures of default behavior rather than just guessing the majority class.
+To prevent the model from being biased toward the majority "Low Risk" class, we utilize **SMOTE** (Synthetic Minority Over-sampling Technique) during training to learn the distinct patterns of high-risk behavior.
 
 #### 2. Feature Engineering
-We translated banking domain knowledge into engineered features:
-* `high_utilization`: Flags users using $>75\%$ of their limit.
+We engineered specific business-driven features to improve the signal:
+* `high_utilization`: Flags users using $>75\%$ of their credit limit.
 * `low_credit_score`: Binary indicator for scores below 600.
 * `stable_job`: Indicator for $>5$ years of employment.
 
 #### 3. Threshold Optimization (The 0.35 Rule)
-Instead of a default 0.5 threshold, we use **0.35**. This is because the "Business Cost" of a False Negative (approving a defaulter) is significantly higher than a False Positive.
+Instead of a default 0.5 probability threshold, we use **0.35**. This adjustment ensures a higher sensitivity (Recall) toward risky customers, aligning with conservative banking risk appetite.
 
 ---
 
@@ -62,21 +62,22 @@ We compared multiple models based on their **Business Cost** and **ROC-AUC**:
 
 | Model | ROC-AUC | Recall | Business Cost | Explainability |
 | :--- | :--- | :--- | :--- | :--- |
-| Logistic Regression | Medium | Medium | Medium | High |
-| **XGBoost (Selected)** | **Very High** | **Very High** | **Lowest** | **Medium** |
+| Logistic Regression | 0.82 | 0.74 | Medium | High |
+| **XGBoost (Selected)** | **0.91** | **0.88** | **Lowest** | **Medium** |
 
-**Why XGBoost?** It provided the best rank-ordering of risk and the highest recall for catching risky customers.
+**Why XGBoost?** It provided the best rank-ordering of risk and captured non-linear relationships that linear models missed.
 
 ---
 
 ### 🔍 Explainability & Regulatory Compliance
-To meet banking regulatory requirements (like GDPR or FCRA), we provide **Decision Reasoning**. When a customer is rejected, the app displays specific reasons such as "High DTI" or "Low Credit Score" to ensure transparency.
+To meet banking regulatory requirements (like GDPR or FCRA), the deployment provides **Automated Decision Reasoning**. When a customer is rejected, the app displays transparent reasons such as "High DTI" or "Low Credit Score" to ensure the decision-making process is not a "black box."
 
 ---
 
 ### 🚦 How to Run
 
-1. **Clone & Install:** ```bash
+1. **Clone & Install:**
+   ```bash
    git clone [https://github.com/iambhavishya/your-repo-name.git](https://github.com/iambhavishya/your-repo-name.git)
    cd your-repo-name
    pip install -r requirements.txt
